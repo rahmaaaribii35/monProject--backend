@@ -4,6 +4,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+// Import HTTP module
+const http = require('http'); 
+// Load environment variables from .env file
+require('dotenv').config();
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -35,4 +40,8 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+// Start the server on the specified port
+const server = http.createServer(app);
+server.listen(process.env.Port, () => {
+  console.log("server is running on port", process.env.Port);
+});
