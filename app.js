@@ -8,6 +8,8 @@ var logger = require('morgan');
 const http = require('http'); 
 // Load environment variables from .env file
 require('dotenv').config();
+// Import the database connection module config
+const {connectToMangoDb} = require('./config/db');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -43,5 +45,6 @@ app.use(function(err, req, res, next) {
 // Start the server on the specified port
 const server = http.createServer(app);
 server.listen(process.env.Port, () => {
+  connectToMangoDb();
   console.log("server is running on port", process.env.Port);
 });
