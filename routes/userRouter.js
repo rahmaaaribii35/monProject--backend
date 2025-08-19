@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const uploadImageUser = require('../middlewares/uploadImageUser');
 
 /* GET users listing. */
 const userController = require("../controllers/userController");
@@ -12,6 +13,8 @@ router.get('/searchUserByFirstName', userController.searchUserByFirstName);
 
 
 router.post('/addClient', userController.addClient);
+router.post('/addClientWithImage', uploadImageUser.single('user_image'), userController.addClientWithImage);
+
 
 router.delete('/deleteUserById/:id', userController.deleteUserById);
 

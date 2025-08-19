@@ -105,3 +105,23 @@ module.exports.addClient = async (req , res)=>{
     }
 }
 
+module.exports.addClientWithImage = async (req , res)=>{
+
+    try {
+        const userData = req.body;
+        userData.role="client";
+
+        if (req.file) {
+            const filename = req.file.filename;
+            userData.user_image=filename
+         }
+        const user=new userModel(userData);
+        const addedUser = await user.save();
+
+        res.status(200).json(addedUser);
+
+    } catch (error) {
+        res.status(500).json({message: error.message});    
+    }
+}
+
