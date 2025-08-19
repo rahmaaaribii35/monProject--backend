@@ -15,6 +15,18 @@ const userSchema = new mongoose.Schema({
 
 })
 
+userSchema.pre('save' , async function(next){
+    try{
+    const salt = await bcrypt.genSalt();
+    const user =this;
+    user.password=await bcrypt.hash(user.password,salt);
+    user.isActive=false; //Deactivated by def
+    next();
+    }catch(error){
+        next(error);
+    }
+})
+
 //exportation
 const User = mongoose.model('User', userSchema);
 module.exports = User;
