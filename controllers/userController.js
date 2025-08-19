@@ -24,10 +24,9 @@ module.exports.getUserById = async (req , res)=>{
         res.status(500).json({message: error.message});
         
     }
-
 }
 
-
+// Get user by age
 module.exports.getUserByAge = async (req , res)=>{
 
     try {
@@ -41,6 +40,18 @@ module.exports.getUserByAge = async (req , res)=>{
 
 }
 
+
+module.exports.getUserStoredByFirstName = async (req , res)=>{
+
+    try {
+        const userList = await userModel.find().sort({firstName : 1});
+        const count = userList.length;
+        res.status(200).json({count, userList});
+    } catch (error) {
+        res.status(500).json({message: error.message});
+        
+    }
+}
 
 // Add a new client
 module.exports.addClient = async (req , res)=>{

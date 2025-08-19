@@ -7,6 +7,8 @@ const userController = require("../controllers/userController");
 router.get('/getAllUsers', userController.getAllUsers);
 router.get('/getUserById/:id', userController.getUserById);
 router.get('/getUserByAge/:age', userController.getUserByAge);
+router.get('/getUserStoredByFirstName', userController.getUserStoredByFirstName);
+
 
 router.post('/addClient', userController.addClient);
 
