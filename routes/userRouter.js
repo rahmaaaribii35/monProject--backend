@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const uploadImageUser = require('../middlewares/uploadImageUser');
+const isAdmin = require('../middlewares/isAdmin');
+
 
 /* GET users listing. */
 const userController = require("../controllers/userController");
@@ -8,8 +10,7 @@ const userController = require("../controllers/userController");
 router.get('/getAllUsers', userController.getAllUsers);
 router.get('/getUserById/:id', userController.getUserById);
 router.get('/getUserByAge/:age', userController.getUserByAge);
-router.get('/getUserStoredByFirstName', userController.getUserStoredByFirstName);
-router.get('/searchUserByFirstName', userController.searchUserByFirstName);
+router.get('/getUserStoredByFirstName/:firstName', userController.getUserStoredByFirstName);
 
 
 router.post('/addClient', userController.addClient);

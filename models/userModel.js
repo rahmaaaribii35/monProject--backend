@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     lastName:String,
     email:{type:String , required: true, unique:true , lowercase:true},
     password:{type:String , required:true ,minLength:12},
-    role:{type:String, enum:["client","admin" ,"..."]},
+    role: {type: String, enum: ["client", "admin"], default: "client"},
     age : Number,
     user_image : {type:String ,required:false},
     isActive:Boolean,

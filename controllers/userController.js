@@ -40,7 +40,7 @@ module.exports.getUserByAge = async (req , res)=>{
 
 }
 
-
+//get user by first name
 module.exports.getUserStoredByFirstName = async (req , res)=>{
 
     try {
@@ -53,6 +53,7 @@ module.exports.getUserStoredByFirstName = async (req , res)=>{
     }
 }
 
+//search user by first name
 module.exports.searchUserByFirstName = async (req , res)=>{
 
     try {
@@ -76,7 +77,7 @@ module.exports.searchUserByFirstName = async (req , res)=>{
     }
 }
 
-
+//delete user by id
 module.exports.deleteUserById = async (req , res)=>{
 
     try {
@@ -105,6 +106,8 @@ module.exports.addClient = async (req , res)=>{
     }
 }
 
+
+//add client with image
 module.exports.addClientWithImage = async (req , res)=>{
 
     try {
@@ -125,3 +128,23 @@ module.exports.addClientWithImage = async (req , res)=>{
     }
 }
 
+
+// Créer un admin 
+module.exports.createAdmin = async (req, res) => {
+  try {
+    const adminExists = await userModel.findOne({ role: "admin" });
+    if (adminExists) {
+      return res.status(400).json({ message: "Admin déjà existant" });
+    }
+
+    const adminData = req.body;
+    adminData.role = "admin";
+
+    const admin = new userModel(adminData);
+    const savedAdmin = await admin.save();
+
+    res.status(201).json(savedAdmin);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
