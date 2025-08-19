@@ -27,6 +27,21 @@ module.exports.getUserById = async (req , res)=>{
 
 }
 
+
+module.exports.getUserByAge = async (req , res)=>{
+
+    try {
+        const age = req.params.age;
+        const user = await userModel.find({age:age});
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({message: error.message});
+        
+    }
+
+}
+
+
 // Add a new client
 module.exports.addClient = async (req , res)=>{
 
