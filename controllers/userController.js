@@ -76,6 +76,19 @@ module.exports.searchUserByFirstName = async (req , res)=>{
     }
 }
 
+
+module.exports.deleteUserById = async (req , res)=>{
+
+    try {
+        const user = await userModel.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: "User deleted successfully", user });
+    } catch (error) {
+        res.status(500).json({message: error.message});
+        
+    }
+
+}
+
 // Add a new client
 module.exports.addClient = async (req , res)=>{
 
