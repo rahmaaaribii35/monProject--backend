@@ -53,6 +53,29 @@ module.exports.getUserStoredByFirstName = async (req , res)=>{
     }
 }
 
+module.exports.searchUserByFirstName = async (req , res)=>{
+
+    try {
+        const firstName = req.body.firstName;
+
+        if (!firstName) {
+            throw new Error("please select a name");
+        }
+
+        const userList = await userModel.find({
+            firstName:{$regex:firstName , $options:"i"},
+        });
+
+        if (userList.length===0) {
+            throw new Error("no user found with this name");
+        }
+        res.status(200).json({ userList});
+    } catch (error) {
+        res.status(500).json({message: error.message});
+        
+    }
+}
+
 // Add a new client
 module.exports.addClient = async (req , res)=>{
 
