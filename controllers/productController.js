@@ -59,5 +59,23 @@ module.exports.getProductsByCategory= async ( req,res)=>{
     }
 }
 
+//get products by price range
+module.exports.getProductsByPriceRange= async ( req,res)=>{
 
+    try {
+        const { min, max } = req.body;
 
+        min = Number(min) || 0;
+        max = Number(max) || Number.MAX_SAFE_INTEGER;
+
+        const productList = await Product.find({ 
+            price: { $gte: min, $lte: max } 
+        });
+
+        res.status(200).json(productList);
+
+    } catch (error) {
+        res.status(500).json({message: error.message});
+        
+    }
+}
