@@ -1,4 +1,4 @@
-const Product = require('../models/productModel');
+const productModel = require('../models/productModel');
 const userModel = require('../models/userModel');
 
 //get all products
@@ -44,6 +44,20 @@ module.exports.getAvailableProducts= async ( req,res)=>{
     }
 }
 
+//get out of stock products
+module.exports.getOutOfStockProducts= async ( req,res)=>{
+
+    try {
+
+        const productList = await productModel.find({isAvailable : false});
+        res.status(200).json(productList);
+        
+    } catch (error) {
+        res.status(500).json({message: error.message});
+        
+    }
+}
+
 
 //get products by category
 module.exports.getProductsByCategory= async ( req,res)=>{
@@ -63,13 +77,44 @@ module.exports.getProductsByCategory= async ( req,res)=>{
 module.exports.getProductsByPriceRange= async ( req,res)=>{
 
     try {
-        const { min, max } = req.body;
+        let { min, max } = req.body;
 
         min = Number(min) || 0;
         max = Number(max) || Number.MAX_SAFE_INTEGER;
 
-        const productList = await Product.find({ 
+        const productList = await productModel.find({ 
             price: { $gte: min, $lte: max } 
+        });
+
+        res.status(200).json(productList);
+
+    } catch (error) {
+        res.status(500).json({message: error.message});
+        
+    }
+}
+
+
+//
+module.exports.getProductsByDateRange= async ( req,res)=>{
+
+    try {
+        let { startDate, endDate } = req.body;
+
+        if (startDate) {
+            startDate = new Date(startDate); //if startDate exists, use it
+        } else {
+            startDate = new Date('1970-01-01'); //else , default 1970-01-01
+        } 
+
+        if (endDate) {
+            endDate = new Date(endDate); //if endDate exists, use it
+        } else {
+            endDate = new Date(); //else , default today
+        }
+
+        const productList = await productModel.find({ 
+            dateAdded: { $gte: startDate, $lte: endDate } 
         });
 
         res.status(200).json(productList);
