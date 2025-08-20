@@ -182,3 +182,23 @@ module.exports.addProduct = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+//add product with images
+module.exports.addProductWithImages = async (req, res) => {
+    try {
+        const productData = req.body;
+
+        if (req.files && req.files.length>0) {
+           const filenames = req.files.map(file => file.filename);
+           productData.images = filenames; 
+        } 
+
+        const product = new productModel(productData);
+        const addedProduct = await product.save();
+        
+        res.status(201).json(addedProduct);
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
