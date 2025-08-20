@@ -95,7 +95,7 @@ module.exports.getProductsByPriceRange= async ( req,res)=>{
 }
 
 
-//
+// get products by date range
 module.exports.getProductsByDateRange= async ( req,res)=>{
 
     try {
@@ -145,6 +145,7 @@ module.exports.getSortProductsByPrice = async ( req , res)=>{
 }
 
 
+// get products sorted by date
 module.exports.getSortProductsByDate = async ( req , res)=>{
     try {
         let order = req.body.order;
@@ -216,3 +217,36 @@ module.exports.deleteProductById = async (req , res)=>{
     }
 
 }
+
+
+// Update product by ID
+module.exports.updateProductById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+
+    // Handle single image upload
+    if (req.files && req.files.length > 0) {
+      if (!updateData.images) {
+        updateData.images = [];
+      }
+      req.files.forEach(file => {
+        updateData.images.push(file.filename);
+      });
+    }
+
+    const updatedProduct = await productModel.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    res.status(200).json(updatedProduct);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

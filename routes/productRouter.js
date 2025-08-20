@@ -23,4 +23,6 @@ router.post('/addProductWithImages', uploadImageProduct.array('images'), product
 
 router.delete('/deleteProductById/:id', productController.deleteProductById);
 
+router.put('/updateProductById/:id', uploadImageProduct.array('images'), productController.updateProductById);
+
 module.exports=router;
