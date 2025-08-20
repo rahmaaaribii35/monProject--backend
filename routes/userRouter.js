@@ -10,13 +10,18 @@ const userController = require("../controllers/userController");
 router.get('/getAllUsers', userController.getAllUsers);
 router.get('/getUserById/:id', userController.getUserById);
 router.get('/getUserByAge/:age', userController.getUserByAge);
-router.get('/getUserStoredByFirstName/:firstName', userController.getUserStoredByFirstName);
+router.get('/getUserStoredByFirstName', userController.getUserStoredByFirstName);
+router.get('/getUsersByCity/:city', userController.getUsersByCity);
 
+router.get('/searchUsersByFirstName', userController.searchUsersByFirstName);
 
 router.post('/addClient', userController.addClient);
 router.post('/addClientWithImage', uploadImageUser.single('user_image'), userController.addClientWithImage);
+router.post('/createAdmin', userController.createAdmin);
 
 
 router.delete('/deleteUserById/:id', userController.deleteUserById);
+
+router.put('/updateUserById/:id', userController.updateUserById);
 
 module.exports = router;

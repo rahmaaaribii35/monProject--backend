@@ -54,28 +54,29 @@ module.exports.getUserStoredByFirstName = async (req , res)=>{
 }
 
 //search user by first name
-module.exports.searchUserByFirstName = async (req , res)=>{
+module.exports.searchUsersByFirstName = async (req, res) => {
+  
+  try {
 
-    try {
-        const firstName = req.body.firstName;
+        const { firstName } = req.body;
 
-        if (!firstName) {
-            throw new Error("please select a name");
-        }
-
-        const userList = await userModel.find({
-            firstName:{$regex:firstName , $options:"i"},
-        });
-
-        if (userList.length===0) {
-            throw new Error("no user found with this name");
-        }
-        res.status(200).json({ userList});
-    } catch (error) {
-        res.status(500).json({message: error.message});
-        
+    if (!firstName) {
+      throw new Error("Please select a name");
     }
-}
+
+    const userList = await userModel.find({
+      firstName: { $regex: firstName, $options: "i" }, 
+    });
+
+    if (userList.length === 0) {
+      throw new Error("Aucune Utilisateur trouve pour ce nom");
+    }
+
+    res.status(200).json({ userList });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 //delete user by id
 module.exports.deleteUserById = async (req , res)=>{
@@ -89,6 +90,17 @@ module.exports.deleteUserById = async (req , res)=>{
     }
 
 }
+
+//get users by city
+module.exports.getUsersByCity = async (req, res) => {
+  try {
+    const city = req.params.city;
+    const usersList = await userModel.find({ "address.city": city });
+    res.status(200).json(usersList);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 // Add a new client
 module.exports.addClient = async (req , res)=>{
@@ -148,3 +160,38 @@ module.exports.createAdmin = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+
+// Update user by ID
+module.exports.updateUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+
+    if (updateData.password) {
+      const bcrypt = require('bcrypt');
+      const salt = await bcrypt.genSalt();
+      updateData.password = await bcrypt.hash(updateData.password, salt);
+    }
+
+    if (req.file) {
+      updateData.user_image = req.file.filename;
+    }
+
+    const updatedUser = await userModel.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+

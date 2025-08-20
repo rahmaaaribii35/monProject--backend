@@ -13,6 +13,14 @@ const userSchema = new mongoose.Schema({
     age : Number,
     user_image : {type:String ,required:false},
     isActive:Boolean,
+    //address as an object 
+    address: {
+        street: { type: String, required: false },
+        city: { type: String, required: false },
+        state: { type: String, required: false },
+        postalCode: { type: String, required: false },
+        country: { type: String, required: false }
+    }
 
 })
 
