@@ -9,5 +9,7 @@ const categorySchema = new mongoose.Schema({
 
 })
 
-const Category = mongoose.model('Category', categorySchema);
+// fhmthesh 
+const Category = mongoose.models.Category || mongoose.model('Category', categorySchema);
+
 module.exports = Category;
