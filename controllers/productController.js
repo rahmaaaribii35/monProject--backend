@@ -1,5 +1,5 @@
 const productModel = require('../models/productModel');
-//const categoryModel = require('../models/categoryModel');
+const categoryModel = require('../models/categoryModel');
 
 
 //get all products
@@ -170,6 +170,12 @@ module.exports.getSortProductsByDate = async ( req , res)=>{
 module.exports.addProduct = async (req, res) => {
     try {
         const productData = req.body;
+
+        // Check if the category exists
+        const categoryExists = await categoryModel.findById(productData.category);
+        if (!categoryExists) {
+            return res.status(400).json({ message: "Invalid category ID" });
+        }
 
         if (productData.quantity > 0) {
            productData.isAvailable = true;
