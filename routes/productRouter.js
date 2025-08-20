@@ -21,4 +21,6 @@ router.get('/getProductsByDateRange', productController.getProductsByDateRange);
 router.post('/addProduct', productController.addProduct);
 router.post('/addProductWithImages', uploadImageProduct.array('images'), productController.addProductWithImages);
 
+router.delete('/deleteProductById/:id', productController.deleteProductById);
+
 module.exports=router;

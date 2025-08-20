@@ -195,10 +195,24 @@ module.exports.addProductWithImages = async (req, res) => {
 
         const product = new productModel(productData);
         const addedProduct = await product.save();
-        
+
         res.status(201).json(addedProduct);
 
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
+
+
+//delete product by id
+module.exports.deleteProductById = async (req , res)=>{
+
+    try {
+        const product = await productModel.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: "Product deleted successfully", product });
+    } catch (error) {
+        res.status(500).json({message: error.message});
+        
+    }
+
+}
