@@ -124,3 +124,61 @@ module.exports.getProductsByDateRange= async ( req,res)=>{
         
     }
 }
+
+// get products sorted by price
+module.exports.getSortProductsByPrice = async ( req , res)=>{
+    try {
+        let order = req.body.order;
+        let sortOrder;
+        if (order && order.toLowerCase() === "desc") {
+            sortOrder = -1;
+        } else {
+            sortOrder = 1;
+        }
+
+        const productList= await productModel.find().sort({ price: sortOrder });
+        res.status(200).json(productList);
+
+    } catch (error) {
+        res.status(500).json({message:error.message});
+    }
+}
+
+
+module.exports.getSortProductsByDate = async ( req , res)=>{
+    try {
+        let order = req.body.order;
+        let sortOrder;
+        if (order && order.toLowerCase() === "desc") {
+            sortOrder = -1;
+        } else {
+            sortOrder = 1;
+        }
+
+        const productList= await productModel.find().sort({ dateAdded: sortOrder });
+        res.status(200).json(productList);
+
+    } catch (error) {
+        res.status(500).json({message:error.message});
+    }
+}
+
+
+//add product
+module.exports.addProduct = async (req, res) => {
+    try {
+        const productData = req.body;
+
+        if (productData.quantity > 0) {
+           productData.isAvailable = true;
+        } else {
+           productData.isAvailable = false;
+        }
+
+        const product = new productModel(productData);
+        const addedProduct = await product.save();
+        res.status(201).json(addedProduct);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
