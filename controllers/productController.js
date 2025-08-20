@@ -1,11 +1,12 @@
 const productModel = require('../models/productModel');
+//const categoryModel = require('../models/categoryModel');
 
 
 //get all products
 module.exports.getAllProducts = async ( req,res)=>{
 
     try {
-        const productList = await productModel.find();
+        const productList = await productModel.find().populate('category');;
         res.status(200).json(productList);
         
     } catch (error) {
@@ -20,7 +21,7 @@ module.exports.getProductById = async ( req,res)=>{
 
     try {
 
-        const product = await productModel.findById(req.params.id);
+        const product = await productModel.findById(req.params.id).populate('category');;
         res.status(200).json(product);
         
     } catch (error) {
@@ -35,7 +36,7 @@ module.exports.getAvailableProducts= async ( req,res)=>{
 
     try {
 
-        const productList = await productModel.find({isAvailable : true});
+        const productList = await productModel.find({isAvailable : true}).populate('category');
         res.status(200).json(productList);
         
     } catch (error) {
@@ -49,7 +50,7 @@ module.exports.getOutOfStockProducts= async ( req,res)=>{
 
     try {
 
-        const productList = await productModel.find({isAvailable : false});
+        const productList = await productModel.find({isAvailable : false}).populate('category');
         res.status(200).json(productList);
         
     } catch (error) {
@@ -63,8 +64,8 @@ module.exports.getOutOfStockProducts= async ( req,res)=>{
 module.exports.getProductsByCategory= async ( req,res)=>{
 
     try {
-        const category = req.params.category
-        const productList = await productModel.find({category});
+        const categoryid = req.params.category
+        const productList = await productModel.find({category : categoryid}).populate('category');
         res.status(200).json(productList);
         
     } catch (error) {
@@ -84,7 +85,7 @@ module.exports.getProductsByPriceRange= async ( req,res)=>{
 
         const productList = await productModel.find({ 
             price: { $gte: min, $lte: max } 
-        });
+        }).populate('category');
 
         res.status(200).json(productList);
 
@@ -115,7 +116,7 @@ module.exports.getProductsByDateRange= async ( req,res)=>{
 
         const productList = await productModel.find({ 
             dateAdded: { $gte: startDate, $lte: endDate } 
-        });
+        }).populate('category');
 
         res.status(200).json(productList);
 
@@ -136,7 +137,7 @@ module.exports.getSortProductsByPrice = async ( req , res)=>{
             sortOrder = 1;
         }
 
-        const productList= await productModel.find().sort({ price: sortOrder });
+        const productList= await productModel.find().sort({ price: sortOrder }).populate('category');
         res.status(200).json(productList);
 
     } catch (error) {
@@ -156,7 +157,7 @@ module.exports.getSortProductsByDate = async ( req , res)=>{
             sortOrder = 1;
         }
 
-        const productList= await productModel.find().sort({ dateAdded: sortOrder });
+        const productList= await productModel.find().sort({ dateAdded: sortOrder }).populate('category');
         res.status(200).json(productList);
 
     } catch (error) {
@@ -178,7 +179,7 @@ module.exports.addProduct = async (req, res) => {
 
         const product = new productModel(productData);
         const addedProduct = await product.save();
-        res.status(201).json(addedProduct);
+        res.status(201).json( await addedProduct.populate('category'));
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -197,7 +198,7 @@ module.exports.addProductWithImages = async (req, res) => {
         const product = new productModel(productData);
         const addedProduct = await product.save();
 
-        res.status(201).json(addedProduct);
+        res.status(201).json(await addedProduct.populate('category'));
 
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -239,7 +240,7 @@ module.exports.updateProductById = async (req, res) => {
       id,
       updateData,
       { new: true, runValidators: true }
-    );
+    ).populate('category');
 
     if (!updatedProduct) {
       return res.status(404).json({ message: "Product not found" });
