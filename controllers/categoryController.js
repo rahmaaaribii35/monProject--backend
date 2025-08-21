@@ -1,5 +1,6 @@
 const categoryModel = require('../models/CategoryModel');
 
+
 // Get all categories
 module.exports.getAllCategories = async (req, res) => {
   try {
