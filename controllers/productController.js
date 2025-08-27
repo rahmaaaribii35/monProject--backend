@@ -232,28 +232,36 @@ module.exports.updateProductById = async (req, res) => {
     const { id } = req.params;
     const updateData = req.body;
 
-    // Handle single image upload
-    if (req.files && req.files.length > 0) {
-      if (!updateData.images) {
-        updateData.images = [];
-      }
-      req.files.forEach(file => {
-        updateData.images.push(file.filename);
-      });
+    // check if product exists
+    const checkIfProductExists = await Product.findById(id);
+    if (!checkIfProductExists) {
+      throw new Error("Product not found!");
     }
 
-    const updatedProduct = await productModel.findByIdAndUpdate(
+    // update images if provided
+    if (req.files && req.files.length > 0) {
+      // if using multer with multiple file uploads
+      updateData.images = req.files.map(file => file.filename);
+    } else if (req.file) {
+      // if only one image uploaded
+      updateData.images = [req.file.filename];
+    }
+
+    // update product
+    const updatedProduct = await Product.findByIdAndUpdate(
       id,
       updateData,
       { new: true, runValidators: true }
     ).populate('category');
 
-    if (!updatedProduct) {
-      return res.status(404).json({ message: "Product not found" });
-    }
+    
+    res.status(200).json({ message: "Product updated successfully", product: updatedProduct });
 
-    res.status(200).json(updatedProduct);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+
+
