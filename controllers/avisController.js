@@ -38,30 +38,37 @@ module.exports.deleteAvisById = async (req, res) => {
 };
 
 
-//update avis by id 
+// Update avis by ID
 module.exports.updateAvisById = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = req.params;
     const updateData = req.body;
 
-    const updateAvis = await avisModel.findByIdAndUpdate( id , updateData , { new: true, runValidators: true });
-
-    if(!updateAvis){
-        return res.status(404).json({message:"avis not found"});
+    // check if avis exists
+    const checkIfAvisExists = await Avis.findById(id);
+    if (!checkIfAvisExists) {
+      throw new Error("Avis not found!");
     }
-    res.status(200).json(updateAvis);
 
-    
+    // update avis
+    const updatedAvis = await Avis.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true, runValidators: true }
+    ).populate("user product"); // optional: populate user & product
+
+    res.status(200).json({ message: "Avis updated successfully", avis: updatedAvis });
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
 
-// get avis by user id 
-module.exports.getAvisByUserId=async(req,res)=>{
-    try {
-        const userId = req.params.userId;
+// get avis by user id
+module.exports.getAvisByUserId = async (req, res) => {
+  try {
+    const userId = req.params.userId;
 
         const avisList = await avisModel.find({user:userId}).populate('user','username email'); //populate to show user info
 
@@ -75,7 +82,7 @@ module.exports.getAvisByUserId=async(req,res)=>{
     }
 }
 
-//
+// get avis by product id
 module.exports.getAvisByProductId = async(req,res)=>{
     try {
         const productId = req.params.productId;
