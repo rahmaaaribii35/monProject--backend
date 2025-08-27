@@ -1,4 +1,4 @@
-const categoryModel = require('../models/CategoryModel');
+const categoryModel = require('../models/categoryModel');
 
 
 // Get all categories
@@ -37,19 +37,27 @@ module.exports.deleteCategory = async (req, res) => {
 };
 
 
-//update category
+// Update category by ID
 module.exports.updateCategory = async (req, res) => {
   try {
-    const updatedCategory = await categoryModel.findByIdAndUpdate(
-        req.params.id, 
-        req.body, 
-        { new: true }
+    const { id } = req.params;
+    const updateData = req.body;
+
+    // check if category exists
+    const checkIfCategoryExists = await Category.findById(id);
+    if (!checkIfCategoryExists) {
+      throw new Error("Category not found!");
+    }
+
+    // update category
+    const updatedCategory = await Category.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true, runValidators: true }
     );
 
-    if (!updatedCategory) {
-      return res.status(404).json({ message: "Category not found" });
-    }
-    res.status(200).json(updatedCategory);
+    res.status(200).json({ message: "Category updated successfully", category: updatedCategory });
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
