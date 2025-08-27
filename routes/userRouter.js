@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const uploadImageUser = require('../middlewares/uploadImageUser');
 const isAdmin = require('../middlewares/isAdmin');
-
+const userController = require("../controllers/userController");
 
 /* GET users listing. */
 const userController = require("../controllers/userController");
@@ -22,6 +22,6 @@ router.post('/createAdmin', userController.createAdmin);
 
 router.delete('/deleteUserById/:id', userController.deleteUserById);
 
-router.put('/updateUserById/:id', userController.updateUserById);
+router.put('/updateUserById/:id', uploadImageUser.single('user_image'), userController.updateUserById);
 
 module.exports = router;
