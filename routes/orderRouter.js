@@ -12,7 +12,7 @@ router.get('/getOrderById/:id', orderController.getOrderById);
 router.post('/createOrder', orderController.createOrder);
 
 
-router.put('/updateOrder/:id', orderController.updateOrder);
+router.put('/updateOrderById/:id', orderController.updateOrderById);
 
 
 router.delete('/deleteOrderById/:id', orderController.deleteOrderById);
