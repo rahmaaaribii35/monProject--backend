@@ -2,14 +2,16 @@ const express = require("express");
 const router = express.Router();
 const avisController = require("../controllers/avisController");
 
-router.post("/addAvis", avisController.addAvis);
+const auth = require("../middlewares/authMiddlewares");
 
-router.get("/getAllAvis", avisController.getAllAvis);
-router.get('/getAvisByUserId/:userId', avisController.getAvisByUserId);
-router.get('/getAvisByProductId/:productId', avisController.getAvisByProductId);
+router.post("/addAvis", auth, avisController.addAvis);
 
-router.put("/updateAvisById/:id", avisController.updateAvisById);
+router.get("/getAllAvis", auth, avisController.getAllAvis);
+router.get('/getAvisByUserId/:userId', auth, avisController.getAvisByUserId);
+router.get('/getAvisByProductId/:productId', auth, avisController.getAvisByProductId);
 
-router.delete("/deleteAvisById/:id", avisController.deleteAvisById);
+router.put("/updateAvisById/:id", auth, avisController.updateAvisById);
+
+router.delete("/deleteAvisById/:id", auth, avisController.deleteAvisById);
 
 module.exports = router;
