@@ -98,7 +98,7 @@ module.exports.createOrder = async (req, res) => {
 // Update order by ID
 module.exports.updateOrderById = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id  = req.params.id;
     const updateData = req.body;
 
     // check if order exists
@@ -110,7 +110,7 @@ module.exports.updateOrderById = async (req, res) => {
     // update order
     const updatedOrder = await Order.findByIdAndUpdate(
       id,
-      updateData,
+      { $set: updateData },
       { new: true, runValidators: true }
     ).populate("user").populate("products.productId"); // populate user and product details
 

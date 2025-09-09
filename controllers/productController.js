@@ -229,7 +229,7 @@ module.exports.deleteProductById = async (req , res)=>{
 // Update product by ID
 module.exports.updateProductById = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id  = req.params.id;
     const updateData = req.body;
 
     // check if product exists
@@ -250,7 +250,7 @@ module.exports.updateProductById = async (req, res) => {
     // update product
     const updatedProduct = await Product.findByIdAndUpdate(
       id,
-      updateData,
+      { $set: updateData },
       { new: true, runValidators: true }
     ).populate('category');
 

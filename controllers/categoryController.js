@@ -52,7 +52,7 @@ module.exports.updateCategory = async (req, res) => {
     // update category
     const updatedCategory = await Category.findByIdAndUpdate(
       id,
-      updateData,
+      { $set: updateData },
       { new: true, runValidators: true }
     );
 

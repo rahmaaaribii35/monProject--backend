@@ -169,7 +169,7 @@ module.exports.createAdmin = async (req, res) => {
 // Update user by ID
 module.exports.updateUserById = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id  = req.params.id ;
     const updateData = req.body;
 
     // check if user exists
@@ -194,7 +194,7 @@ module.exports.updateUserById = async (req, res) => {
     //update user
     const updatedUser = await userModel.findByIdAndUpdate(
       id,
-      updateData,
+      { $set: updateData },
       { new: true, runValidators: true }
     );
 

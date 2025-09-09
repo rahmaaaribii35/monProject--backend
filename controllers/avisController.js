@@ -53,7 +53,7 @@ module.exports.updateAvisById = async (req, res) => {
     // update avis
     const updatedAvis = await Avis.findByIdAndUpdate(
       id,
-      updateData,
+      { $set: updateData },
       { new: true, runValidators: true }
     ).populate("user product"); // optional: populate user & product
 
