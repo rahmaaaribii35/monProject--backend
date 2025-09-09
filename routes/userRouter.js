@@ -24,5 +24,6 @@ router.delete('/deleteUserById/:id', userController.deleteUserById);
 router.put('/updateUserById/:id', uploadImageUser.single('user_image'), userController.updateUserById);
 
 router.post('/login', userController.login);
+router.post('/logout', userController.logout);
 
 module.exports = router;
