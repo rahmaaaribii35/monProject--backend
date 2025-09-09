@@ -206,12 +206,24 @@ module.exports.updateUserById = async (req, res) => {
 };
 
 
+//jsonwebtoken
+const jwt =require('jsonwebtoken');
+const maxAge=1*60 //1min
+const createToken =(id)=>{
+  return jwt.sign({id},'net GlamTounes secret',{expiresIn:maxAge})
+}
+
+
 //login
 module.exports.login = async(req,res)=>{
   try {
     //logique 
     const{email , password}=req.body;
     const user = await userModel.login(email,password);
+
+    const token = createToken(user._id);
+    res.cookie('tokenJwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+
     res.status(200).json({message:"login successful", user : user});
   } catch (error) {
     res.status(500).json({message: error.message});
