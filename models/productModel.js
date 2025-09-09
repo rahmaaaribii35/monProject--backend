@@ -12,6 +12,11 @@ const productSchema = new mongoose.Schema({
     images: [{ type: String }], // array of image URLs
     isAvailable: { type: Boolean, default: true },
     dateAdded: { type: Date, default: Date.now },
+
+
+    orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }],
+    categories: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }]
+
 });
 
 // exportation

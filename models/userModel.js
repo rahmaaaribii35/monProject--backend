@@ -20,9 +20,14 @@ const userSchema = new mongoose.Schema({
         state: { type: String, required: false },
         postalCode: { type: String, required: false },
         country: { type: String, required: false }
-    }
+    },
 
-})
+   avis: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Avis' }],
+   orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }]
+
+});
+
+
 
 userSchema.pre('save' , async function(next){
     try{

@@ -12,7 +12,10 @@ const avisSchema = new mongoose.Schema({
         required: true
     },
     comment:{type:String,required:true},
-    date:{type:Date,default:Date.now}
+    date:{type:Date,default:Date.now},
+
+    owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+
 });
 
 module.exports = mongoose.model("Avis", avisSchema);

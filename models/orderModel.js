@@ -62,8 +62,10 @@ const orderSchema = new mongoose.Schema({
         state: { type: String },
         postalCode: { type: String },
         country: { type: String, required: true }
-    }
-    
+    },
+
+    owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }]
 
 
 })
