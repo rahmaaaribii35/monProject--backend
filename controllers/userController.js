@@ -205,3 +205,15 @@ module.exports.updateUserById = async (req, res) => {
   }
 };
 
+
+//login
+module.exports.login = async(req,res)=>{
+  try {
+    //logique 
+    const{email , password}=req.body;
+    const user = await userModel.login(email,password);
+    res.status(200).json({message:"login successful", user : user});
+  } catch (error) {
+    res.status(500).json({message: error.message});
+  }
+}
