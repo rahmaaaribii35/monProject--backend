@@ -3,6 +3,7 @@ var router = express.Router();
 
 
 const uploadImageProduct = require('../middlewares/uploadImageProduct');
+const auth = require("../middlewares/authMiddlewares");
 
 /*get users listing*/
 const productController = require("../controllers/productController");
@@ -18,11 +19,11 @@ router.get('/getSortProductsByDate', productController.getSortProductsByDate);
 router.get('/getProductsByDateRange', productController.getProductsByDateRange);
 
 
-router.post('/addProduct', productController.addProduct);
-router.post('/addProductWithImages', uploadImageProduct.array('images'), productController.addProductWithImages);
+router.post('/addProduct',auth, productController.addProduct);
+router.post('/addProductWithImages',auth, uploadImageProduct.array('images'), productController.addProductWithImages);
 
-router.delete('/deleteProductById/:id', productController.deleteProductById);
+router.delete('/deleteProductById/:id',auth, productController.deleteProductById);
 
-router.put('/updateProductById/:id', uploadImageProduct.array('images'), productController.updateProductById);
+router.put('/updateProductById/:id', auth, uploadImageProduct.array('images'), productController.updateProductById);
 
 module.exports=router;
